@@ -1,0 +1,33 @@
+{
+  "name": "secure-authentication",
+  "version": "1.0.0",
+  "description": "This is a backend API For secure Authentication including JWT &amp; 2FA",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Evan-Codes88/Secure-Authentication.git"
+  },
+  "keywords": [],
+  "author": "Evan",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Evan-Codes88/Secure-Authentication/issues"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mailtrap": "^4.0.0",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
