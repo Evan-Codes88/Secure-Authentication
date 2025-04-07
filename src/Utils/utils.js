@@ -1,3 +1,6 @@
+// Importing Dependencies
+import jwt from 'jsonwebtoken';
+
 /**
  * Utility function to send error responses consistently
  * 
@@ -19,3 +22,30 @@ export const sendErrorResponse = (response, status, message) =>
  */
 export const sendSuccessResponse = (response, status, message, data = {}) =>
     response.status(status).json({ message, ...data });
+
+
+/** Utility function to generate verification code
+ * 
+ */
+export const generateVerificationToken = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+
+/** Utility function to generate token and set cookie
+ * 
+ */
+export const generateTokenAndSetCookie = (response, userId) => {
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+    });
+
+    response.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return token;
+};
