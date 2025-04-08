@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { User } from '../Models/UserModel.js';
 import { generateVerificationToken, generateTokenAndSetCookie, sendErrorResponse, sendSuccessResponse } from '../Utils/utils.js';
+import { sendVerificationEmail } from '../Mailtrap/emails.js';
 
 export const signup = async (request, response) => {
     const { fullName, email, password } = request.body;
@@ -32,6 +33,8 @@ export const signup = async (request, response) => {
 
         generateTokenAndSetCookie(response, user._id);
 
+        await sendVerificationEmail(user.email, verificationToken);
+
         return sendSuccessResponse(response, 201, "User has been created successfully", {
             success: true,
             user: {
@@ -42,8 +45,8 @@ export const signup = async (request, response) => {
         
 
     } catch (error) {
-        console.log("Error in Signup", error.message);
-        return sendErrorResponse(response, 404, "Signup Failed");
+        console.log("Error sending email:", error.message);
+        return sendErrorResponse(response, 500, `Failed to send verification email: ${error.message}`);
     }
 };
 
