@@ -17,8 +17,6 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "Password field is required"],
-        minlength: [6, "Password must be at least 6 characters long"],
-        match: [/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "Password must be at least 6 characters and contain at least one letter and one number"],
     },
     lastLogin: {
         type: Date,
@@ -34,4 +32,4 @@ const userSchema = new mongoose.Schema({
     verificationTokenExpiresAt: Date,
 }, { timestamps: true });
 
-export const user = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
