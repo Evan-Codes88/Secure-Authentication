@@ -89,6 +89,7 @@ export const login = async (request, response) => {
 };
 
 export const logout = async (request, response) => {
-    response.send("Logout Route");
+    response.clearCookie("token");
+    return sendSuccessResponse(response, 200, "Logged Out Successfully")
 };
 
