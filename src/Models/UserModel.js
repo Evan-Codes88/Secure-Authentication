@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { encrypt, decrypt } from '../Utils/utils.js'
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -33,24 +32,12 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    twoFactorSecretEncrypted: String,
+    twoFactorSecret: String,
 }, { timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
  });
 
-userSchema.virtual('twoFactorSecret')
-    .get(function () {
-        if (!this.twoFactorSecretEncrypted) return null;
-        try {
-            return decrypt(this.twoFactorSecretEncrypted);
-        } catch (err) {
-            console.error('Decryption error:', err.message);
-            return null;
-        }
-    })
-    .set(function (value) {
-        this.twoFactorSecretEncrypted = encrypt(value);
-    });
+
 
 export const User = mongoose.model("User", userSchema);

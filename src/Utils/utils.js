@@ -1,6 +1,5 @@
 // Importing Dependencies
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
 import { User } from '../Models/UserModel.js';
 
 /**
@@ -78,8 +77,8 @@ export const isAuthenticated = async (request, response, next) => {
             });
         }
 
-        request.user = user; // attach user object to request
-        next(); // proceed to the next middleware or route handler
+        request.user = user; 
+        next();
     } catch (error) {
         console.error("Auth error:", error.message);
         return response.status(401).json({
@@ -87,33 +86,4 @@ export const isAuthenticated = async (request, response, next) => {
             message: "Invalid or expired token",
         });
     }
-};
-
-/** Utility function to Encrypt the 2FA Secret
- * 
- */
-
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || '12345678901234567890123456789012';
-const IV_LENGTH = 16;
-
-if (ENCRYPTION_KEY.length !== 32) {
-    throw new Error("ENCRYPTION_KEY must be exactly 32 characters long for AES-256-CBC.");
-}
-
-export const encrypt = (text) => {
-    const iv = crypto.randomBytes(IV_LENGTH);
-    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
-    let encrypted = cipher.update(text);
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return iv.toString('hex') + ':' + encrypted.toString('hex');
-};
-
-export const decrypt = (text) => {
-    const parts = text.split(':');
-    const iv = Buffer.from(parts.shift(), 'hex');
-    const encryptedText = Buffer.from(parts.join(':'), 'hex');
-    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
-    let decrypted = decipher.update(encryptedText);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    return decrypted.toString();
 };
