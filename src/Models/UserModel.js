@@ -26,10 +26,13 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    resetPasswordToken: { type: String, trim: true },
-    resetPasswordExpiresAt: Date,
     verificationToken: { type: String, trime: true },
     verificationTokenExpiresAt: Date,
+    twoFactorEnabled: {
+        type: Boolean,
+        default: false
+    },
+    twoFactorSecret: String,
 }, { timestamps: true });
 
 export const User = mongoose.model("User", userSchema);

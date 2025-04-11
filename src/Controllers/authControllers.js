@@ -1,4 +1,6 @@
 import bcrypt from 'bcryptjs';
+import speakeasy from 'speakeasy';
+import qrcode from 'qrcode';
 import { User } from '../Models/UserModel.js';
 import { generateVerificationToken, generateTokenAndSetCookie, sendErrorResponse, sendSuccessResponse } from '../Utils/utils.js';
 import { sendVerificationEmail, sendWelcomeEmail } from '../Mailtrap/emails.js';
@@ -85,34 +87,52 @@ export const verifyEmail = async (request, response) => {
 };
 
 export const login = async (request, response) => {
-    const { email, password } = request.body;
-        try {
-            const user = await User.findOne({ email });
-            if (!user) {
-                return sendErrorResponse(response, 400, "Invalid Credentials");
+    const { email, password, token } = request.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return sendErrorResponse(response, 400, "Invalid Credentials");
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return sendErrorResponse(response, 400, "Invalid Credentials");
+        }
+
+        // If 2FA is enabled, require the token
+        if (user.twoFactorEnabled) {
+            if (!token) {
+                return sendErrorResponse(response, 400, "2FA token required");
             }
-            const isPasswordValid = await bcrypt.compare(password, user.password);
-            if (!isPasswordValid) {
-                return sendErrorResponse(response, 400, "Invalid Credentials");
-            }
-    
-            generateTokenAndSetCookie(response, user._id);
-    
-            user.lastLogin = new Date();
-            await user.save();
-    
-            return sendSuccessResponse(response, 200, "Logged in successfully", {
-                success: true,
-                user: {
-                    ...user._doc,
-                    password: undefined,
-                },
+
+            const isTokenValid = speakeasy.totp.verify({
+                secret: user.twoFactorSecret,
+                encoding: 'base32',
+                token,
+                window: 1
             });
 
-        } catch (error) {
-            console.log("Error in login ", error);
-            return sendErrorResponse(response, 400, "Login Error");
+            if (!isTokenValid) {
+                return sendErrorResponse(response, 400, "Invalid 2FA token");
+            }
         }
+
+        generateTokenAndSetCookie(response, user._id);
+
+        user.lastLogin = new Date();
+        await user.save();
+
+        return sendSuccessResponse(response, 200, "Logged in successfully", {
+            user: {
+                ...user._doc,
+                password: undefined,
+            },
+        });
+
+    } catch (error) {
+        console.log("Error in login ", error);
+        return sendErrorResponse(response, 400, "Login Error");
+    }
 };
 
 export const logout = async (request, response) => {
@@ -120,3 +140,41 @@ export const logout = async (request, response) => {
     return sendSuccessResponse(response, 200, "Logged Out Successfully")
 };
 
+export const setup2FA = async (request, response) => {
+    const user = await User.findById(request.user._id);
+
+    const secret = speakeasy.generateSecret({
+        name: `YourApp (${user.email})`
+    });
+
+    user.twoFactorSecret = secret.base32;
+    await user.save();
+
+    qrcode.toDataURL(secret.otpauth_url, (err, dataUrl) => {
+        if (err) return sendErrorResponse(response, 500, "Failed to generate QR code");
+        return sendSuccessResponse(response, 200, "2FA setup successful", {
+            qrCodeUrl: dataUrl,
+            secret: secret.base32
+        });
+    });
+};
+
+export const verify2FACode = async (request, response) => {
+    const { token } = request.body;
+    const user = await User.findById(request.user._id);
+
+    const verified = speakeasy.totp.verify({
+        secret: user.twoFactorSecret,
+        encoding: 'base32',
+        token
+    });
+
+    if (!verified) {
+        return sendErrorResponse(response, 400, "Invalid 2FA code");
+    }
+
+    user.twoFactorEnabled = true;
+    await user.save();
+
+    return sendSuccessResponse(response, 200, "2FA has been enabled successfully");
+};

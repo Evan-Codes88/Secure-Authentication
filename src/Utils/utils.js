@@ -1,5 +1,6 @@
 // Importing Dependencies
 import jwt from 'jsonwebtoken';
+import { User } from '../Models/UserModel.js';
 
 /**
  * Utility function to send error responses consistently
@@ -48,4 +49,41 @@ export const generateTokenAndSetCookie = (response, userId) => {
     });
 
     return token;
+};
+
+
+/** Utility functions to check if authenticated
+ * 
+ */
+export const isAuthenticated = async (request, response, next) => {
+    try {
+        const token = request.cookies.token;
+
+        if (!token) {
+            return response.status(401).json({
+                success: false,
+                message: "Authentication required",
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await User.findById(decoded.userId);
+
+        if (!user) {
+            return response.status(401).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        request.user = user; // attach user object to request
+        next(); // proceed to the next middleware or route handler
+    } catch (error) {
+        console.error("Auth error:", error.message);
+        return response.status(401).json({
+            success: false,
+            message: "Invalid or expired token",
+        });
+    }
 };
