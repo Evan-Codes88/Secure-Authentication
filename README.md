@@ -14,6 +14,7 @@ This blog post walks through the _ethical and technical issues_ tackled in this 
 
 - [Industry Trends and Opportunities](#industry-trends-and-opportunities)
 - [Ethical and Technical Considerations](#ethical-and-technical-considerations)
+- [Insecure User Authentication and Its Solution](#insecure-user-authentication-and-its-solution)
 - [Project Overview](#project-overview)
 - [Implementation Details](#implementation-details)
   - [JWT Authentication](#jwt-authentication)
@@ -71,8 +72,68 @@ In my authentication system, I've incorporated JSON Web Tokens (JWTs) with defin
 
 ## Ethical and Technical Considerations
 
+As developers we are not only problem solvers, but we are also responsible for people's personal data and digital identities. Creating an authentication system isn't just for restricting access points, it means protecting users from harm, uphoalding legal resposibilities, and creating and maintaining trust with our users that their personal data is safe. One of the most critical ethical issues in software development today is the secure handling of user authentication.
+
+# The Core Ethical Issue: Mishandling User Authentication
+
+This ethical issue surrounds failure to protect user data by using inedequate methods of authentication or storing users personal infomation incorrectly. Failure to do so can lead to identity theft, blackmail, financial loss, or reputational damage for both users and companies.
+
+This is a violation of ethical responsibility and legal obligations, particularly under regulations such as the _General Data Protection Regulation (GDPR)_ and the _Australian Privacy Principles (APPs)_.
+
+**Example Ethical Violations:**
+
+- Storing plaintext passwords or insecure password hashes.
+
+- Failing to implement multi-factor authentication in applications dealing with sensitive or financial data.
+
+- Using vulnerable authentication flows without proper threat modeling or penetration testing.
+
+These choices can be caused by many factors including laziness or rushing to ship quickly and can result in ethical violations that harm users.
+
+> According to the GDPR (Art. 5), personal data must be “processed in a manner that ensures appropriate security,” including protection against unauthorized access and accidental loss. Failing to meet this standard is not just illegal—it’s unethical. European Commission, General Data Protection Regulation (GDPR).
+
+# Trust and Responsibility in the Developer Role
+
+Users very rarely read the fine print and have an inherent trust in developers to "do the right thing" surrounding their personal data. This means we have a _moral responsibility_ to ensure we understand and anticipate how malicious actors might exploit our system.
+
+For instance, if an app handles medical information, not implementing 2FA can be considered unethical. Even if it’s technically “compliant.” Similarly, neglecting secure session handling (e.g., missing HttpOnly or SameSite cookie flags) is equivalent to leaving the door open to attackers.
+
+> The ACM Code of Ethics emphasizes that computing professionals must “design and implement systems that are robustly and usably secure.” It also states that developers should “take care to avoid harm.” ACM Code of Ethics and Professional Conduct
+
+# Consequences of Ethical Negligence
+
+Neglecting secure authentication practices has real-world consequences:
+
+- Uber (2022): An attacker used social engineering and poor MFA design to compromise internal systems, revealing source code and administrative dashboards.
+
+- Colonial Pipeline (2021): Weak credentials and no MFA led to a major ransomware attack that disrupted fuel supply for millions of Americans.
+
+These are not just security failures but ethical failures that compromised the public’s safety, finances, and digital well-being.
+
+# How This Project Addresses These Ethical Concerns
+
+This project directly responds to these concerns by implementing:
+
+- Time-based One-Time Password (TOTP) 2FA, to ensure only the rightful user can log in, even if their password is compromised.
+
+- JWT Authentication with Expiration and secure cookie handling to reduce the risk of session hijacking.
+
+- Email Verification to confirm user identity and prevent fraudulent registrations.
+
+These mechanisms demonstrate a commitment to ethical development practices and reflect a deep understanding of technical safeguards.
+
+## The Problem: Insecure User Authentication and Its Solution
+
 ## References
+
+> Association for Computing Machinery (ACM). (2018). ACM Code of Ethics and Professional Conduct. https://www.acm.org/code-of-ethics
+
+> BBC News. (2021, May 8). Colonial Pipeline: US fuel pipeline cyber-attack shuts system. BBC. https://www.bbc.com/news/world-us-canada-57027074
+
+> European Commission. (n.d.). Article 5 - Principles relating to processing of personal data. General Data Protection Regulation (GDPR). https://gdpr-info.eu/art-5-gdpr/
 
 > Gartner. (2022, October 25). Gartner identifies the top strategic technology trends for 2023. https://www.gartner.com/en/newsroom/press-releases/2022-10-25-gartner-identifies-top-strategic-technology-trends-for-2023
 
 > JumpCloud. (2025, February). Passwordless authentication adoption trends in 2025. https://jumpcloud.com/blog/passwordless-authentication-adoption-trends
+
+> Turton, W. (2022, September 16). Uber investigates breach of its computer systems. Bloomberg. https://www.bloomberg.com/news/articles/2022-09-16/uber-investigates-breach-of-its-computer-systems
