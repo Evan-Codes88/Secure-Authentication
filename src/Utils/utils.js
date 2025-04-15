@@ -1,5 +1,6 @@
 // Importing Dependencies
 import jwt from 'jsonwebtoken';
+import rateLimit from 'express-rate-limit';
 import { User } from '../Models/UserModel.js';
 
 /**
@@ -87,3 +88,14 @@ export const isAuthenticated = async (request, response, next) => {
         });
     }
 };
+
+/** Utility function to limit the amount of login attempts
+ * 
+ */
+export const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5, 
+    message: "Too many login attempts from this IP, please try again later.",
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
