@@ -124,6 +124,19 @@ These mechanisms demonstrate a commitment to ethical development practices and r
 
 ## The Problem: Insecure User Authentication and Its Solution
 
+In many web applications, user authentication is often the most frequently exploited weakness within modern web applications. Despite it being resposible for maintaing user security and is a gateway to sensitive user data, many systems still rely on outdated security practices. For example some developers default tominimal security implementations such as password only logins, without considering the broader security implications or user behaviour.
+
+# Why Is This A Problem
+
+Passwords are a critical vulnerability due to many factors:
+
+- _Weak or common passwords:_ Many users will choose easily guessable passwords, like Password123 or 123456.
+- _Reused Passwords:_ If a password is reused across many different platforms. A breach on one, leaves all other services at risk.
+- _Phishing and Social Engineering:_ Attackers will exxploit human error by tricking users into entering their details into malicious sites.
+- _Lack Of Password Complexity Enforcement:_ Without requirements for length, symbols, or unpredictability, passwords are easier to crack.
+
+# The Solution: Multi-layered Authentication and Secure Session Design
+
 ## References
 
 > Association for Computing Machinery (ACM). (2018). ACM Code of Ethics and Professional Conduct. https://www.acm.org/code-of-ethics
