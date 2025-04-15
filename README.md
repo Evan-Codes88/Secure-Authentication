@@ -15,16 +15,6 @@ This blog post walks through the _ethical and technical issues_ tackled in this 
 - [Industry Trends and Opportunities](#industry-trends-and-opportunities)
 - [Ethical and Technical Considerations](#ethical-and-technical-considerations)
 - [Insecure User Authentication and Its Solution](#insecure-user-authentication-and-its-solution)
-- [Project Overview](#project-overview)
-- [Implementation Details](#implementation-details)
-  - [JWT Authentication](#jwt-authentication)
-  - [Two-Factor Authentication (2FA) with TOTP](#two-factor-authentication-2fa-with-totp)
-  - [Email Verification](#email-verification)
-- [Setup Instructions](#setup-instructions)
-- [Case Studies](#case-studies)
-- [Lessons Learned](#lessons-learned)
-- [Conclusion](#conclusion)
-- [References](#references)
 
 ## Industry Trends and Opportunities
 
@@ -207,6 +197,9 @@ These layered defenses close common security gaps while preserving a user-friend
 
 > Association for Computing Machinery (ACM). (2018). ACM Code of Ethics and Professional Conduct. https://www.acm.org/code-of-ethics
 
+> Australian Cyber Security Centre. (2024). Implement multi-factor authentication. Australian Government.
+> https://www.cyber.gov.au/acsc/view-all-content/guidance-materials/implement-multi-factor-authentication
+
 > BBC News. (2021, May 8). Colonial Pipeline: US fuel pipeline cyber-attack shuts system. BBC. https://www.bbc.com/news/world-us-canada-57027074
 
 > European Commission. (n.d.). Article 5 - Principles relating to processing of personal data. General Data Protection Regulation (GDPR). https://gdpr-info.eu/art-5-gdpr/
@@ -215,4 +208,10 @@ These layered defenses close common security gaps while preserving a user-friend
 
 > JumpCloud. (2025, February). Passwordless authentication adoption trends in 2025. https://jumpcloud.com/blog/passwordless-authentication-adoption-trends
 
+> OWASP Foundation. (2023). Authentication cheat sheet. OWASP.
+> https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
+
 > Turton, W. (2022, September 16). Uber investigates breach of its computer systems. Bloomberg. https://www.bloomberg.com/news/articles/2022-09-16/uber-investigates-breach-of-its-computer-systems
+
+> Verizon. (2023). 2023 Data Breach Investigations Report. Verizon Enterprise.
+> https://www.verizon.com/business/resources/reports/dbir/
