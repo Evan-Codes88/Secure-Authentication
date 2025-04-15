@@ -193,6 +193,141 @@ Through these measures, my project defends agaisnt:
 
 These layered defenses close common security gaps while preserving a user-friendly login experience—balancing security with usability.
 
+## Project Plan: Authentication System Implementation
+
+# Objective
+
+My goal for this project was to design a multi layered authentication system for developers to use in their web applications that mitigates common threats such as credential stuffing, phishing, and session hijacking and ultimately protecting sensitive user data and ensuring legal compliance.
+
+# Step By Step Plan
+
+# Step 1: Identify The Problem & Research Frameworks - Time Estimation 4-6 Hours
+
+_Identify and Define the Problem_
+My project began with me identifying a common vulnerability in modern web applications: insecure user authentication. With a growing number of data breaches caused by stolen credentials and weak login systems, I chose to solve this issue by designing a secure, multi layered authentication system that developers could take and implement in their own projects.
+
+_Framework and Tool Research_
+Before I dove in to start building my project, I completed comparative research into various frameworks and libraries that could help enfore modern security practices.
+
+- _Express.js (Node.js Framework):_ I went with Express for its speed, minimalism, and flexibility. I considered alternatives like Django and Laravel, but Express was chosen for its lightweight nature, vast community, and my existing familiarity with JavaScript (a language I’ve been actively developing in).
+
+- _Comparing Authentication Approaches:_
+
+  - _Session Based Authentication:_ express-session was considere as it offers stateful security but it does require server side storage making it less scalable.
+  - _JWT (JSON Web Tokens):_ Stateless, scalable, and suitable for RESTful APIs. Widely adopted and recommended by OWASP.
+  - I selected JWT due to its easy integration into modern web applications, and its ability to securely transport users personal data between frontend and backend without storing session state on the server.
+
+- _2FA Libraries:_
+
+  - Explored tools like Speakeasy and otplib for TOTP-based 2FA.
+  - Speakeasy was selected due to its clear documentation and compatibility with Google Authenticator.
+
+- _Rate Limiting Solution:_
+
+  - Evaluated express-rate-limit and rate-limiter-flexible.
+  - Opted for express-rate-limit because it provides sufficient security for login throttling and integrates well with Express without additional dependencies like Redis.
+  - This middleware was easy to integrate with Express and allowed me to define limits (e.g., 5 attempts per 15 minutes) with minimal configuration.
+
+- _Email Verfication:_
+  - Instead of traditional SMTP or third-party marketing tools, I used Mailtrap, a secure email testing tool designed for development environments.
+  - Mailtrap simulates real email delivery, allowing me to test verification flows without sending emails to real inboxes, which is perfect for a project focused on backend logic and security.
+  - Compared to SendGrid or Mailgun, Mailtrap was faster to configure and didn't require setting up DNS records or domains, which would have added complexity and cost.
+
+# Step 2: Project Planning and Timeline - Time Estimation 5-7 Hours
+
+After selecting the tools and frameworks in Step 1, I developed a structured plan to guide the entire development process. This included outlining each major development milestone, assigning estimated timeframes, and defining clear deliverables for each stage.
+
+_Goal Setting and Prioritisation:_
+I broke down the overall project objective - to build a secure, multi layered user authentication system, into smaller, achievable goals based on functionality and security:
+
+- _Core Authentication:_ Sign-up, login, logout using JWT.
+- _Email Verification:_ Send and verify time-sensitive email tokens via Mailtrap.
+- _Two-Factor Authentication (2FA):_ Enforce TOTP for individual users after signup.
+- _Secure Cookie & Session Handling:_ Implement HttpOnly, Secure, SameSite settings.
+- _Rate Limiting and Brute Force Protection:_ Throttle login attempts.
+- _Logout and Token Revocation:_ Ensure stolen tokens cannot be reused.
+- _Error Handling, Validation, and Logging:_ Improve debugging and security auditing.
+- _Testing & Documentation:_ Unit testing critical flows, writing clear setup documentation.
+
+_Agile Inspired Workflow:_
+Although this was a solo project, I followed a lightweight agile approach by:
+
+- Working in small, testable increments (e.g., complete login before building 2FA).
+- Creating mini sprints per feature with GitHub commits for each task.
+- Continuously testing endpoints using Postman after each implementation.
+- Committing regularly with clear commit messages describing functionality added or bugs fixed.
+
+_Balancing Realism with Ambition:_
+I was mindful not to bite off more than I could chew or try to implement features I couldn’t fully secure (e.g., biometric authentication, complex user permissions). The planning focused on implementing real-world, industry-recommended authentication layers while allowing time for proper testing and documentation.
+
+# Step 3: Feature Development and Implementation - Time Estimation 12-15 Hours
+
+This step involved developing the core functionality of my secure authentication system. It required a thoughtful, layered approach to ensure not just usability but compliance with security best practices from OWASP and the Australian Cyber Security Centre.
+
+1. _User Registration and JWWT Based Login:_
+   - Implemented using Express,js with bcrypt for password hashing and jsonwebtoken for token generation.
+   - _On Signup:_
+     - User password is hashed and saved to mongoDB.
+     - And email verification token is generated and sent via Mailtrap for secure testing.
+   - _On Login:_
+     - User credentials are verified.
+     - A signed JWT is generated and sent in a secure, HTTPOnly cookie with SameSite=Strict.
+
+_Security Consideration: Short-lived JWTs (15 mins) were used to minimise token reuse risk, with refresh tokens planned for future work._
+
+2. _Email Verification Via Mailtrap:_
+   - Implemented a system to:
+     - Generate a time sensitive token on signup (expires after 10 mins).
+     - Store user as unverified until they input said verification code sent to them via Mailtrap.
+   - Verified users are granted access to login.
+
+_Justification: Mailtrap allows safe testing of real email logic without spamming actual inboxes — ideal for dev environments (Mailtrap, 2024)._
+
+3. _Two-Factor Authentication (2FA) Using TOTP_
+   - Integrated speakeasy to generate Time-based One-Time Passwords (TOTP).
+   - Users will be directed after logging in for the first time to enable 2FA.
+
+_Justification: TOTP dramatically reduces the risk of password-only breaches, aligning with ACSC and OWASP recommendations._
+
+4. _Rate Limited Login Attempts:_
+   - Used express-rate-limit to block brute force attacks by:
+     - Limiting login attempts to 5 per 10 minutes per IP address.
+     - Returning a warning and temporary lockout message on abuse.
+
+_Justification: This stops automated credential stuffing and supports responsible login practices._
+
+5. _Secure Session Cookies:_
+   - JWTs were sent to clients as HttpOnly and Secure cookies:
+     - HttpOnly prevents JavaScript access (defeats XSS token theft).
+     - Secure ensures transmission only over HTTPS.
+     - SameSite=Strict blocks cross origin login attempts (defeats CSRF).
+
+_Justification: Matches recommendations from OWASP's Authentication Cheat Sheet (2023)._
+
+6. _Logout Token Revocation:_
+   - Built a logout route that clears the authentication cookie.
+   - Server ensures any residual tokens are invalidated client-side.
+
+_Future Plan: Implement a token blacklist or refresh token rotation for high-risk use cases (e.g., financial services)._
+
+7. _Error Handling, Validation, and Logging In:_
+   - Implemented descriptive server-side error messages.
+   - Created a centralized error middleware to catch unhandled issues and log them neatly.
+
+_Future Plan: Use express-validator to validate all inputs (email format, password strength) instead of checking manually._
+
+8. _Manual Testing Via Postman:_
+   - Each endpoint was tested:
+     - Valid and invalid inputs
+     - Token expiry scenarios
+     - 2FA workflow
+     - Email verification workflow
+   - JWTs and cookies were inspected manually via DevTools and Postman headers.
+
+# Reflection On Implementation
+
+I followed a "build small, test often" strategy. This made it easier to isolate bugs and focus on the security of each component before adding complexity. The structure of the code remained modular and scalable, allowing new features like password reset, refresh tokens, or user roles to be added later.
+
 ## References
 
 > Association for Computing Machinery (ACM). (2018). ACM Code of Ethics and Professional Conduct. https://www.acm.org/code-of-ethics
