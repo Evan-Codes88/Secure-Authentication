@@ -6,15 +6,25 @@ Security is becoming a crucial necessity in the ever changing digital world of t
 
 According to IBM's _Cost of a Data Breach Report 2023_, the average cost of a data breach in 2023 was _$4.45 million_, a _15% increase over three years_.
 
-In response to this growing concern, I created a safe authentication system that is modular and simple to incorporate into other web application projects, allowing developers to use email verification, JWT, and TOTP-based Two-Factor Authentication (2FA) to achieve robust authentication.
+In response to this growing concern, I created a safe authentication system that is modular and simple to incorporate into other web application projects, allowing developers to use email verification, JWT, and TOTP-based 2FA to achieve robust authentication.
 
 This blog post walks through the _ethical and technical issues_ tackled in this project, provides _implementation details and justifications_, and _reflects on lessons learned during development_. It also explores _current and emerging industry trends in web security_, such as the rising adoption of multi-factor authentication (MFA) and the shift toward zero-trust architecture. Additionally, it includes _full setup instructions_ and _real-world case studies_, offering developers an opportunity to implement a scalable, modern, and secure authentication system in their own projects.
 
 ## Table of Contents
 
-- [Industry Trends and Opportunities](#industry-trends-and-opportunities)
-- [Ethical and Technical Considerations](#ethical-and-technical-considerations)
-- [Insecure User Authentication and Its Solution](#insecure-user-authentication-and-its-solution)
+[Industry Trends and Opportunities](#industry-trends-and-opportunities) - [Passwordless Authentication Is Going Mainstream](#passwordless-authentication-is-going-mainstream) - [The Rise of Zero Trust Security Models](#the-rise-of-zero-trust-security-models)
+[Ethical and Technical Considerations](#ethical-and-technical-considerations) - [The Core Ethical Issue: Mishandling User Authentication](#the-core-ethical-issue-mishandling-user-authentication) - [Trust and Responsibility in the Developer Role](#trust-and-responsibility-in-the-developer-role) - [Consequences of Ethical Negligence](#consequences-of-ethical-negligence) - [How This Project Addresses These Ethical Concerns](#how-this-project-addresses-these-ethical-concerns)
+[The Problem: Insecure User Authentication and Its Solution](#the-problem-insecure-user-authentication-and-its-solution) - [Why Is This A Problem](#why-is-this-a-problem) - [The Solution: Multi-layered Authentication and Secure Session Design](#the-solution-multi-layered-authentication-and-secure-session-design) - [JWT Authentication](#jwt-authentication) - [Two Factor Authentication (2FA) with TOTP](#two-factor-authentication-2fa-with-totp) - [Email Verification](#email-verification) - [Secure Cookie Handling](#secure-cookie-handling) - [Logout and Token Revocation](#logout-and-token-revocation) - [Compliance With Industry Recommendations](#compliance-with-industry-recommendations) - [Practical Outcomes and Risk Mitigation](#practical-outcomes-and-risk-mitigation)
+
+- [Objective](#objective)
+- [Step By Step Plan](#step-by-step-plan)
+  - [Step 1: Identify The Problem & Research Frameworks](#step-1-identify-the-problem--research-frameworks---time-estimation-4-6-hours)
+  - [Step 2: Project Planning and Timeline](#step-2-project-planning-and-timeline---time-estimation-5-7-hours)
+  - [Step 3: Feature Development and Implementation](#step-3-feature-development-and-implementation---time-estimation-12-15-hours)
+- [Reflection On Implementation](#reflection-on-implementation)
+- [Skills Justification and Technology Choices](#skills-justification-and-technology-choices)
+  - [Why These Skills and Technologies Were Chosen](#why-these-skills-and-technologies-were-chosen)
+- [Skills Gained During This Project](#skills-gained-during-this-project)
 
 ## Industry Trends and Opportunities
 
@@ -34,7 +44,7 @@ Also according to Verizon’s Data Breach Investigations Report, 68% of data bre
 
 > Opportunity: For developers, this presents an exciting opportunity to implement WebAuthn, OAuth with magic links, or biometric support using third-party authentication services. This not only improves security but also reduces friction during login, boosting user retention.
 
-In my project, I’ve set up a standard login system using usernames and passwords, but I’ve made sure it follows modern security best practices. Passwords are hashed, sessions are managed using JWTs, and I’ve made two-factor authentication (2FA) mandatory to add an extra layer of security. I’ve also added email verification during sign-up to help confirm user identities.
+In my project, I’ve set up a standard login system using usernames and passwords, but I’ve made sure it follows modern security best practices. Passwords are hashed, sessions are managed using JWTs, and I’ve made 2FA mandatory to add an extra layer of security. I’ve also added email verification during sign-up to help confirm user identities.
 
 Even though the system currently uses passwords, I’ve built it in a way that makes it easy to upgrade later—whether that’s adding support for biometric logins with WebAuthn, using magic links sent via email, or letting users log in with hardware keys like YubiKey.
 
@@ -213,7 +223,7 @@ Before I dove in to start building my project, I completed comparative research 
 
 - _Comparing Authentication Approaches:_
 
-  - _Session Based Authentication:_ express-session was considere as it offers stateful security but it does require server side storage making it less scalable.
+  - _Session Based Authentication:_ express-session was considered as it offers stateful security but it does require server side storage making it less scalable.
   - _JWT (JSON Web Tokens):_ Stateless, scalable, and suitable for RESTful APIs. Widely adopted and recommended by OWASP.
   - I selected JWT due to its easy integration into modern web applications, and its ability to securely transport users personal data between frontend and backend without storing session state on the server.
 
@@ -228,7 +238,7 @@ Before I dove in to start building my project, I completed comparative research 
   - Opted for express-rate-limit because it provides sufficient security for login throttling and integrates well with Express without additional dependencies like Redis.
   - This middleware was easy to integrate with Express and allowed me to define limits (e.g., 5 attempts per 15 minutes) with minimal configuration.
 
-- _Email Verfication:_
+- _Email Verification:_
   - Instead of traditional SMTP or third-party marketing tools, I used Mailtrap, a secure email testing tool designed for development environments.
   - Mailtrap simulates real email delivery, allowing me to test verification flows without sending emails to real inboxes, which is perfect for a project focused on backend logic and security.
   - Compared to SendGrid or Mailgun, Mailtrap was faster to configure and didn't require setting up DNS records or domains, which would have added complexity and cost.
@@ -264,7 +274,7 @@ I was mindful not to bite off more than I could chew or try to implement feature
 
 This step involved developing the core functionality of my secure authentication system. It required a thoughtful, layered approach to ensure not just usability but compliance with security best practices from OWASP and the Australian Cyber Security Centre.
 
-1. _User Registration and JWWT Based Login:_
+1. _User Registration and JWT Based Login:_
    - Implemented using Express,js with bcrypt for password hashing and jsonwebtoken for token generation.
    - _On Signup:_
      - User password is hashed and saved to mongoDB.
@@ -327,6 +337,71 @@ _Future Plan: Use express-validator to validate all inputs (email format, passwo
 # Reflection On Implementation
 
 I followed a "build small, test often" strategy. This made it easier to isolate bugs and focus on the security of each component before adding complexity. The structure of the code remained modular and scalable, allowing new features like password reset, refresh tokens, or user roles to be added later.
+
+# Skills Justification and Technology Choices
+
+To successfully complete this project, I drew upon a wide range of skills that were essential in developing a secure, modern user authentication system. These included:
+
+- _Backend Development with Node.js and Express:_ Understanding of routing, middleware, and RESTful API design.
+- _Authentication and Authorisation:_ Implementation of JWT-based auth, user session management, and plans to implement role-based access in the future.
+- _Security Best Practices:_ Knowledge of hashing (bcrypt), cookie security, environment variables, and brute force attack prevention.
+- _Email Handling and 2FA:_ Experience with SMTP services (Mailtrap) and implementing TOTP based 2FA with Speakeasy.
+- _Database Operations:_ CRUD functionality and schema management with MongoDB and Mongoose.
+
+Each of these skills was critical to addressing the primary problem: building a secure and scalable login system that protects user data and supports 2FA.
+
+# Why These Skills and Technologies Were Chosen
+
+The choices made for this project were deliberate and based on a combination of prior knowledge, industry best practices, and resource availability:
+
+- _Node.js and Express:_ Chosen for its lightweight, asynchronous nature and large ecosystem. It allowed for rapid backend development and easy integration with other tools like MongoDB. I also chose it based on prior knowledge and experience.
+- _MongoDB and Mongoose:_ Used for their flexibility and JSON like structure, making it easy to model users and authentication tokens. The Mongoose ORM simplifies validation and schema handling as well.
+
+- _JSON Web Tokens:_ Offers stateless authentication, which is ideal for RESTful APIs. It allows user sessions to be validated without querying the database on every request.
+
+- _Bcrypt:_ A widely adopted hashing algorithm designed for passwords, offering protection against cyber attacks.
+
+- _Speakeasy:_ Chosen for its simplicity in implementing TOTP 2FA, following the same standard used by Google Authenticator and similar apps.
+
+- _Mailtrap:_ Selected as a safe, development-friendly SMTP testing tool, preventing accidental emails being sent to real users while still verifying integration.
+
+## Skills Gained During This Project
+
+This project was a significant opportunity for personal and professional development, helping me to grow as a developer and deepen my understanding of backend security, authentication workflows, and full-stack project planning. The key skills I developed include:
+
+- _Advanced Authentication Techniques:_
+  I gained a strong understanding of how modern applications handle user authentication, particularly 2FA. This includes generating and validating time based tokens (TOTP), understanding the logic behind verification windows, and securing sensitive user information.
+
+- _Security Best Practices With Node.js:_
+  Before this project, I had only a surface level understanding of web security. I learned to implement secure password hashing using bcrypt, manage cookies safely with proper flags (e.g., httpOnly, secure, sameSite), and the importance of verifying email addresses before granting access to accounts.
+
+- _Working With Third Party Tools:_
+  I became familiar with integrating tools such as Mailtrap for email testing and Speakeasy for 2FA. I also learned how to read API documentation and troubleshoot third party libraries effectively, which is a key skill when working in real world environments.
+
+- _Backend Debugging and Logging:_
+  Through debugging authentication flows, I became more comfortable identifying and solving issues with asynchronous code using async/await, understanding stack traces, and improving server side logging for better error visibility.
+
+- _Code Modularity and Reusability:_
+  I improved my ability to write modular code by separating functions like generateTokenAndSetCookie, sendErrorResponse, and sendSuccessResponse. This not only made the code cleaner but also easier to reuse and test in other parts of the project.
+
+- _Planning and Time Management:_
+  Planning each step of the project before beginning helped me stay focused and meet deadlines. I learned how important it is to define scope early and not get overwhelmed by feature creep.
+
+# What Could Be Done Differently In The Future
+
+Reflecting on my development process, there are several things I would approach differently if I or someone else were to tackle a similar project in the future:
+
+- _Input Validation with express-validator:_
+  While the system works, I did not fully implement express-validator for sanitizing and validating user inputs. Using this tool would prevent invalid or malicious data from reaching the database or causing unexpected behavior. I now understand how critical validation is for both security and stability.
+
+- _Upgrade Email Integration for Production:_
+  While Mailtrap was ideal for development and testing, it is not intended for production use. If this were a live project, I would integrate SendGrid or Mailgun with proper domain verification to handle transactional emails securely and reliably.
+
+- _Build a Frontend for Better UX:_
+  Currently, the backend API handles the logic for 2FA and email verification, but the lack of a frontend makes it harder to test from a user’s perspective. In the future, I would build a React frontend or integrate with an existing client to offer better visibility into verification flows and user feedback.
+
+- _Add More Unit and Integration Testing:_
+  While I tested core functionalities manually, automated testing with tools like Jest would have improved code reliability and helped detect errors early. This is an area I’m looking to improve in future backend projects.
 
 ## References
 
