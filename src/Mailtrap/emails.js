@@ -1,10 +1,13 @@
-import { mailtrapClient, sender } from "../Mailtrap/MailtrapConfig.js";
-import { sendErrorResponse } from "../Utils/utils.js";
-import { VERIFICATION_EMAIL_TEMPLATE } from "./emailTemplates.js";
-
+/**
+ * @function sendVerificationEmail
+ * @description Sends a verification email to the user with a verification token.
+ * @param {string} email - The email address of the recipient.
+ * @param {string} verificationToken - The verification code to be sent to the user.
+ * @returns {Promise<void>} - Resolves once the email is successfully sent.
+ */
 export const sendVerificationEmail = async (email, verificationToken) => {
     const recipient = [{ email }];
-
+  
     const response = await mailtrapClient.send({
         from: sender,
         to: recipient,
@@ -12,13 +15,20 @@ export const sendVerificationEmail = async (email, verificationToken) => {
         html: VERIFICATION_EMAIL_TEMPLATE.replace("{verificationCode}", verificationToken),
         category: "Email Verification",
     });
-
+  
     console.log("Email Sent Successfully", response);
 };
 
+/**
+ * @function sendWelcomeEmail
+ * @description Sends a welcome email to the user after registration, including their full name in the email template.
+ * @param {string} email - The email address of the recipient.
+ * @param {string} fullName - The full name of the recipient to be inserted into the template.
+ * @returns {Promise<void>} - Resolves once the email is successfully sent or an error is caught.
+ */
 export const sendWelcomeEmail = async (email, fullName) => {
     const recipient = [{ email }];
-
+  
     try {
         const response = await mailtrapClient.send({
             from: sender,
@@ -28,7 +38,7 @@ export const sendWelcomeEmail = async (email, fullName) => {
                 fullName: fullName,
             },
         });
-
+  
         console.log("Welcome email sent successfully", response);
     } catch (error) {
         console.error(`Error sending welcome email`, error);

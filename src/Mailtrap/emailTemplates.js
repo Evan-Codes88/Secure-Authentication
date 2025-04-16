@@ -1,3 +1,14 @@
+/**
+ * @file Email HTML templates for verification, password reset, and password reset confirmation.
+ * Replace placeholder values like {verificationCode} or {resetURL} before sending.
+ */
+
+/**
+ * @constant VERIFICATION_EMAIL_TEMPLATE
+ * @type {string}
+ * @description Template for sending email verification code to users.
+ * Replace `{verificationCode}` with the actual code before sending.
+ */
 export const VERIFICATION_EMAIL_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +39,11 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
 </html>
 `;
 
+/**
+ * @constant PASSWORD_RESET_SUCCESS_TEMPLATE
+ * @type {string}
+ * @description Template for notifying users that their password reset was successful.
+ */
 export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
@@ -65,6 +81,12 @@ export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 </html>
 `;
 
+/**
+ * @constant PASSWORD_RESET_REQUEST_TEMPLATE
+ * @type {string}
+ * @description Template for sending password reset link to users.
+ * Replace `{resetURL}` with the actual reset link before sending.
+ */
 export const PASSWORD_RESET_REQUEST_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">

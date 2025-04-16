@@ -1,7 +1,10 @@
-// Importing mongoose package to interact with MongoDB
-import mongoose from 'mongoose';
-
-// Async function used to connect to MongoDB using Mongoose
+/**
+ * @function connectDB
+ * @description Asynchronously connects to MongoDB using Mongoose and logs the connection status.
+ * @param {Object} request - The incoming request object (not used in this function).
+ * @param {Object} response - The outgoing response object (not used in this function).
+ * @returns {Promise<void>} - Resolves once the connection attempt is complete.
+ */
 export const connectDB = async (request, response) => {
     try {
         // Await the connection to MongoDB and store the connection result
@@ -16,5 +19,5 @@ export const connectDB = async (request, response) => {
 
         // Exiting the process with a failure code if the connection fails
         process.exit(1);
-    };
+    }
 };
