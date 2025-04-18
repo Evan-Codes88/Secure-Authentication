@@ -1,12 +1,14 @@
+# Authentication System Containerisation Planning
+
+This document explains the full application architecture of a secure user management system, including user authentication, 2FA, email verification, and session handling.
+
 # Application Architecture Diagram
 
 ![Application Architecture Diagram](./images/AAD.png)
 
 ## High-Level AAD Explanation
 
-This Application Architecture Diagram (AAD) outlines a backend focused system built with Node.js and Express. It demonstrates how the backend API interacts with a MongoDB database and integrates with external services like Mailtrap for email delivery and Speakeasy for two-factor authentication. The architecture ensures secure user management, including email verification and 2FA, while supporting token based authentication using JWT.
-
----
+## This Application Architecture Diagram (AAD) outlines a backend focused system built with Node.js and Express. It demonstrates how the backend API interacts with a MongoDB database and integrates with external services like [Mailtrap](https://mailtrap.io) for email delivery and [Speakeasy](https://github.com/speakeasyjs/speakeasy) for two-factor authentication. The architecture ensures secure user management, including email verification and 2FA, while supporting token based authentication using [JWT](https://jwt.io).
 
 ### Backend API (Node.js with Express)
 
