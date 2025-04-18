@@ -25,6 +25,7 @@ This blog post walks through the _ethical and technical issues_ tackled in this 
 - [Skills Justification and Technology Choices](#skills-justification-and-technology-choices)
   - [Why These Skills and Technologies Were Chosen](#why-these-skills-and-technologies-were-chosen)
 - [Skills Gained During This Project](#skills-gained-during-this-project)
+- [Getting Started](#getting-started)
 
 ## Industry Trends and Opportunities
 
@@ -402,6 +403,138 @@ Reflecting on my development process, there are several things I would approach 
 
 - _Add More Unit and Integration Testing:_
   While I tested core functionalities manually, automated testing with tools like Jest would have improved code reliability and helped detect errors early. This is an area I’m looking to improve in future backend projects.
+
+---
+
+# Getting Started
+
+This section will walk you through setting up the project on your local machine so you can develop, test, or contribute.
+
+---
+
+### Prerequisites
+
+Before you begin, ensure you have the following tools installed on your computer:
+
+| Tool                               | Description                                                 | Install Link                                                              |
+| ---------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **Node.js (v18+)**                 | JavaScript runtime that runs the backend code               | [nodejs.org](https://nodejs.org/en)                                       |
+| **npm**                            | Node package manager (automatically installed with Node.js) | [npmjs.com](https://www.npmjs.com/)                                       |
+| **Git**                            | Used to clone this repository                               | [git-scm.com](https://git-scm.com/)                                       |
+| **MongoDB Atlas** (Optional)       | If you want your own MongoDB cluster                        | [mongodb.com/cloud](https://www.mongodb.com/cloud/atlas)                  |
+| **Postman or Insomnia** (Optional) | Tools to test API endpoints                                 | [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/) |
+
+---
+
+### Step 1: Clone the Repository
+
+Use Git to download the code from GitHub:
+
+```bash
+git clone https://github.com/Evan-Codes88/Secure-Authentication.git
+cd Secure-Authentication
+```
+
+## Step 2: Install Project Dependencies
+
+Once you're inside the project folder, run the following command to install all required packages listed in the `package.json`:
+
+```bash
+npm install
+```
+
+This command installs essential libraries such as:
+
+- Express – Web framework for Node.js
+- Mongoose – MongoDB ODM (Object Document Mapper)
+- JWT – For secure token-based authentication
+- Dotenv – To load environment variables
+- Speakeasy – For Two-Factor Authentication (TOTP)
+- Mailtrap – For email testing in development
+- Nodemon (dev dependency) – Automatically restarts your server on file changes
+
+## Step 3: Create a `.env` File
+
+Environment variables allow you to securely store sensitive configuration details separately from your codebase.
+
+In the **root** of your project, create a new file named `.env`.
+
+Add the following environment variables to it:
+
+```env
+MONGODB_URI=mongodb+srv://username:password@your-cluster.mongodb.net/your-database?retryWrites=true&w=majority&appName=your-app-name
+JWT_SECRET=your_jwt_secret_key
+NODE_ENV=development
+MAILTRAP_TOKEN=your_mailtrap_token
+```
+
+## Step 4: Run the Project
+
+### ▶️ Development Mode (with live reload)
+
+To start the project in development mode using **Nodemon**, run the following command:
+
+```bash
+npm run dev
+```
+
+## 📚 Package Version Info
+
+To maintain consistent behavior, here are some of the important packages and their expected versions:
+
+| Package                                                    | Version (example) | Description               |
+| ---------------------------------------------------------- | ----------------- | ------------------------- |
+| [express](https://www.npmjs.com/package/express)           | ^4.18.2           | Web server framework      |
+| [mongoose](https://www.npmjs.com/package/mongoose)         | ^7.0.3            | MongoDB interaction       |
+| [dotenv](https://www.npmjs.com/package/dotenv)             | ^16.0.3           | Loads `.env` variables    |
+| [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) | ^9.0.0            | JWT-based authentication  |
+| [speakeasy](https://www.npmjs.com/package/speakeasy)       | ^2.0.0            | Two-Factor Authentication |
+| [mailtrap](https://www.npmjs.com/package/mailtrap)         | ^3.4.0            | Email testing platform    |
+| [nodemon](https://www.npmjs.com/package/nodemon)           | ^3.0.1 (dev)      | Auto server restart       |
+
+---
+
+### Check Installed Versions
+
+To check the installed version of any package locally, use the following command:
+
+```bash
+npm ls <package-name>
+```
+
+For Example:
+
+```bash
+npm ls exxpress
+```
+
+# External Services & Documentation
+
+Here are the services used in this project and their official documentation:
+
+- 📬 [Mailtrap Documentation](https://mailtrap.io/docs) – For email testing
+- 🔐 [Speakeasy Documentation](https://github.com/speakeasyjs/speakeasy) – For TOTP-based 2FA
+- 🪪 [JWT Introduction](https://jwt.io/introduction/) – Learn how JWT works
+
+# Tips for a Clean Project
+
+- Always run `npm install` after cloning or pulling new updates
+- Don’t commit your `.env` file
+- Keep dependencies updated using:
+
+```bash
+npm outdated
+```
+
+# You're Ready!
+
+Now that your app is running, you can begin testing endpoints or building additional features like signup/login routes, 2FA, or email verification.
+
+If you run into issues, double-check:
+
+- MongoDB URI is correct
+- `.env` file is present
+- Mailtrap token is valid
 
 ## References
 
