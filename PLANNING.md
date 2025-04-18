@@ -77,6 +77,8 @@ This Application Architecture Diagram (AAD) outlines a backend focused system bu
 5. _Welcome Email:_
    If the verification is successful, the system will trigger a welcome email through a similar path.
 
+---
+
 ![Email Verification Flow](./images/Email%20Flow.png)
 
 #### Benefits Of Using Mailtrap:
@@ -113,6 +115,8 @@ This Application Architecture Diagram (AAD) outlines a backend focused system bu
    - If valid, the backend allows the login to proceed and generates a JWT.
    - If invalid, an error response is returned and access is denied.
 
+---
+
 ![2FA Flow](./images/2FA%20Setup%20Flow.png)
 
 #### Why It's Important:
@@ -120,5 +124,50 @@ This Application Architecture Diagram (AAD) outlines a backend focused system bu
 - Greatly reduces the risk of credential-based breaches.
 - Even if passwords are compromised, the attacker can’t log in without the 2FA code.
 - Easy to implement and widely supported.
+
+---
+
+### Authentication & JWT Management Flow Explanation
+
+#### Responsibilities
+
+To ensure users are securely authenticated and can maintain a session across multiple requests.
+
+#### Step By Step Flow:
+
+1. _User Logs In:_
+   The user submits credentials (email/password) through the frontend
+
+2. _Backend Validates Credentials:_
+   The Express backend checks credentials against stored values in MongoDB (passwords hashed via `bcrypt`)
+
+3. _2FA Check:_
+   The system will envoke the 2FA Flow. If successful, it continues to the next step
+
+4. _JWT Generation:_
+   Once verified, the backend generates a JWT (JSON Web Token) using a secret key. The JWT contains:
+
+   - User ID
+   - Issued timestamp
+   - Expiry (e.g., 1h or 7d)
+
+5. _Token Sent To Client:_
+   The JWT is sent back to the frontend and stored in localStorage or as an HTTP-only cookie
+
+6. _Authentication Requests:_
+   On every future API request, the JWT is sent in the Authorisation header. The backend validates the token using middleware (e.g., `express-jwt` or custom logic).
+
+7. _Token Expiry:_
+   If the token is expired or invalid, the user is asked to log in again.
+
+---
+
+![Authentication Workflow](./images/Authentication%20Flow.png)
+
+#### Why JWT:
+
+- Stateless authentication (no session stored on server)
+- Easy to scale across services
+- Secure when properly signed and stored
 
 ---
