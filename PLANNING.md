@@ -57,10 +57,10 @@ This Application Architecture Diagram (AAD) outlines a backend focused system bu
 
 #### Step By Step Flow:
 
-1. User Triggers Email Event:
+1. _User Triggers Email Event:_
    A user will perform the action of signing up which is captured by the frontend and sent as a request to the Backend API.
 
-2. Backend Prepares Email:
+2. _Backend Prepares Email:_
    The backend uses a helper function (e.g. `sendVerificationEmail`) to compose the email content. This includes:
 
    - Recipient email address
@@ -68,13 +68,13 @@ This Application Architecture Diagram (AAD) outlines a backend focused system bu
    - Verification link/token
    - HTML/plaintext body
 
-3. Send Via Mailtrap:
+3. _Send Via Mailtrap:_
    The composed email data is sent to Mailtrap via a POST request. Mailtrap acts as a development SMTP server, intercepting emails so they do not reach real users.
 
-4. Mailtrap Response:
+4. _Mailtrap Response:_
    Mailtrap simulates the sending of the email and returns a response to the backend indicating success or failure.
 
-5. Welcome Email:
+5. _Welcome Email:_
    If the verification is successful, the system will trigger a welcome email through a similar path.
 
 ![Email Verification Flow](./images/Email%20Flow.png)
@@ -85,5 +85,40 @@ This Application Architecture Diagram (AAD) outlines a backend focused system bu
 - Avoids spamming real users
 - Useful for debugging and reviewing email formatting
 - Easy to integrate into CI/CD pipelines or dev workflows
+
+---
+
+### Speakeasy (2FA Library)
+
+#### Responsibilities:
+
+- Generates TOTP 2FA secrets.
+- Verifies TOTP tokens during login.
+
+#### Step By Step Flow:
+
+1. _User Signs Up and Enables 2FA:_
+   The user will be automatically guided to the 2FA after signing up. The backend uses Speakeasy to generate a time based one time password (TOTP) secret.
+
+2. _Secret Sent To User:_
+   The TOTP secret is converted into a QR code (e.g., using qrcode npm package) and sent to the user via frontend. The user scans it with an authenticator app like Google Authenticator or Authy.
+
+3. _User Logs In With 2FA Code:_
+   After submitting correct credentials, the frontend prompts the user for their 2FA code. This code is submitted back to the backend for validation.
+
+4. _Backend Verifies Code:_
+   Speakeasy checks the code against the saved secret using `totp.verify()`
+
+5. _Success Or Failure:_
+   - If valid, the backend allows the login to proceed and generates a JWT.
+   - If invalid, an error response is returned and access is denied.
+
+![2FA Flow](./images/2FA%20Setup%20Flow.png)
+
+#### Why It's Important:
+
+- Greatly reduces the risk of credential-based breaches.
+- Even if passwords are compromised, the attacker can’t log in without the 2FA code.
+- Easy to implement and widely supported.
 
 ---
