@@ -29,9 +29,17 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y docker-compose
         # Installs Docker Compose, which is not preinstalled on the runner
 
-      - name: Build and run Docker Compose
+      - name: Build and run Docker Compose (Production)
         run: docker-compose -f docker-compose.yaml up --build -d app-prod
-        # Builds the Docker images and runs only the production service in detached mode
+        # Builds the Docker image and runs the production service in detached mode
+
+      - name: Build and run Docker Compose (Development)
+        run: docker-compose -f docker-compose.yaml up --build -d app-dev
+        # Builds the Docker image and runs the development service in detached mode
+
+      - name: Build and run Docker Compose (Testing)
+        run: docker-compose -f docker-compose.yaml up --build -d app-test
+        # Builds the Docker image and runs the testing service in detached mode
 
       - name: Check running containers
         run: docker ps # Optional: Lists all running containers to verify successful startup
