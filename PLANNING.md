@@ -173,3 +173,201 @@ To ensure users are securely authenticated and can maintain a session across mul
 - Secure when properly signed and stored
 
 ---
+
+# Error Handling and Edge Cases
+
+## Responsibilities
+
+Manage potential errors in authentication, such as invalid credentials, failed 2FA, or database issues.
+
+## Step-by-Step Flow
+
+### 1. **Failed Authentication**
+
+- **Condition:** If the user provides incorrect credentials (wrong email or password).
+- **Response:** The backend responds with an error message and status code `400 Bad Request`:
+  - Message: `"Invalid credentials"`
+
+### 2. **Failed 2FA**
+
+- **Condition:** If the user enters an invalid 2FA code during login or verification.
+- **Response:** The system returns a `400 Bad Request` error:
+  - Message: `"Invalid 2FA code"`
+
+### 3. **Failed Email Verification**
+
+- **Condition:** If the user attempts to verify an email with an invalid or expired verification token.
+- **Response:** The system returns a `400 Bad Request` error:
+  - Message: `"Invalid or expired verification code"`
+
+### 4. **Database Issues**
+
+- **Condition:** If the MongoDB database is unreachable or an error occurs while interacting with the database.
+- **Response:** The backend responds with an error status indicating the issue, such as `500 Internal Server Error`.
+  - Message: `"Failed to send verification email: <error_message>"` or `"Database connection failed"`
+
+### 5. **Missing Fields**
+
+- **Condition:** If required fields are missing in the request (e.g., during signup or login).
+- **Response:** The backend responds with an error message and status code `400 Bad Request`:
+  - Message: `"All fields are required"`
+
+### 6. **Password Strength Validation**
+
+- **Condition:** If the user’s password does not meet strength requirements (at least 6 characters, contains at least one letter and one number).
+- **Response:** The system returns a `400 Bad Request` error:
+  - Message: `"Password must be at least 6 characters and contain at least one letter and one number."`
+
+### 7. **Email Already Exists**
+
+- **Condition:** If the email is already registered in the system.
+- **Response:** The system returns a `400 Bad Request` error:
+  - Message: `"Email is already in use"`
+
+### 8. **User Not Verified**
+
+- **Condition:** If a user attempts to log in without verifying their email.
+- **Response:** The system returns a `403 Forbidden` error:
+  - Message: `"Please verify your email before logging in"`
+
+### 9. **2FA Required**
+
+- **Condition:** If the user tries to log in but 2FA is not enabled.
+- **Response:** The system returns a `403 Forbidden` error:
+  - Message: `"2FA setup is required before you can log in"`
+
+### 10. **Logging Errors**
+
+- **Condition:** Any error occurring in the authentication flow, including validation failures and 2FA issues, should be logged for debugging.
+- **Response:** While errors are currently logged to the console for debugging, it's recommended to use a logging library (e.g., [Winston](https://github.com/winstonjs/winston) or [Morgan](https://github.com/expressjs/morgan)) for more comprehensive error tracking. This approach ensures that all errors are properly logged and can be effectively monitored for troubleshooting purposes.
+
+## Example Error Responses
+
+### Login Error:
+
+```json
+{
+  "success": false,
+  "message": "Invalid credentials"
+}
+```
+
+### 2FA Code Error:
+
+```json
+{
+  "success": false,
+  "message": "Invalid 2FA code"
+}
+```
+
+### Database Connection Error:
+
+```json
+{
+  "success": false,
+  "message": "Failed to send verification email: Database connection failed"
+}
+```
+
+### Missing Field Error:
+
+```json
+{
+  "success": false,
+  "message": "All fields are required"
+}
+```
+
+---
+
+## Security Considerations
+
+### Password Policies:
+
+Ensure that passwords meet complexity requirements, such as:
+
+- Minimum length of 8 characters
+- Must contain at least one uppercase letter, one number, and one special character.
+
+### Secure Storage:
+
+- Passwords should be hashed using bcrypt before storage in MongoDB.
+- 2FA secrets should be stored securely and not exposed in clear text.
+
+### Rate Limiting:
+
+- Implement rate limiting to prevent brute force attacks on login, registration, and email verification endpoints (e.g., using `express-rate-limit`).
+
+---
+
+## Session Expiry and Refresh Tokens
+
+### Responsibilities:
+
+Ensure secure session management, allowing users to remain logged in without needing to constantly re-authenticate.
+
+### Flow:
+
+1. **User Logs In**: After the user successfully logs in and completes 2FA, a short-lived JWT (JSON Web Token) is created to manage the user's session.
+
+2. **Refresh Token**: Alongside the JWT, a refresh token is generated and sent to the frontend. The refresh token is securely stored (e.g., in an HTTP-only cookie) to prevent access via client-side JavaScript.
+
+3. **Token Expiry**: When the JWT expires, the frontend can send the refresh token to the backend to request a new JWT. This allows users to remain logged in without needing to authenticate again, improving the user experience while maintaining security.
+
+### Key Security Considerations:
+
+- Ensure the refresh token is stored securely in an HTTP-only cookie to prevent exposure via client-side scripts.
+- Implement proper token expiration and validation mechanisms on the backend to minimize potential vulnerabilities.
+
+---
+
+## Future Improvements: Logging and Monitoring
+
+### Responsibilities:
+
+Enhancing the logging and monitoring process will help ensure more efficient debugging and improve security audits as the project scales.
+
+### Proposed Improvements:
+
+1. **Log Successful Logins/Logouts**:
+
+   - Future development should include recording detailed information on every successful and failed login attempt, such as IP address, date/time, and device information.
+   - This will improve the ability to track user activity and diagnose issues related to authentication.
+
+2. **Monitor Suspicious Activity**:
+   - Implement a robust monitoring service that can detect abnormal login behavior, like multiple failed login attempts or attempts from suspicious IP addresses.
+   - Proactive monitoring can help quickly identify unauthorized access attempts and improve overall system security.
+
+---
+
+## Future Improvements: Database Schema & Third-Party Integrations
+
+### Responsibilities:
+
+- **Database Schema**: Ensure secure and efficient management of user data.
+- **Third-Party Integrations**: Plan for any future integrations with external services such as payment systems or social login options.
+
+### Proposed Improvements:
+
+#### Database Schema:
+
+1. **Users Collection**:
+
+   - The `Users` collection will store essential user data, including email, hashed password, and 2FA secrets.
+   - This will allow efficient and secure access to user-specific information during authentication and authorization.
+
+2. **Sessions Collection (Optional)**:
+   - An optional `Sessions` collection could be used to store session-specific data such as refresh tokens, session expiration time, etc.
+   - This will improve the scalability and manageability of user sessions, particularly for applications with long-lasting user interactions.
+
+#### Third-Party Integrations:
+
+1. **Payment System Integration**:
+
+   - Future integration of a payment system (e.g., Stripe or PayPal) could enable secure transactions for your e-commerce functionalities.
+   - It will be essential to plan for secure handling of payment data and smooth interaction with the payment API.
+
+2. **Social Login**:
+   - Consider adding social login options (e.g., Google, Facebook) to streamline the registration and login process for users.
+   - This would enhance user convenience, as many users prefer using existing credentials for login.
