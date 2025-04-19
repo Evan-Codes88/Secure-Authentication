@@ -1,3 +1,6 @@
+// importing dependencies
+import mongoose from "mongoose";
+
 /**
  * @function connectDB
  * @description Asynchronously connects to MongoDB using Mongoose and logs the connection status.

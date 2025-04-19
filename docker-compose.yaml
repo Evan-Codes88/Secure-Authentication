@@ -1,0 +1,43 @@
+version: '3.8'  # Docker Compose file format version
+
+services:
+  # ------------------------
+  # Development Environment
+  # ------------------------
+  app-dev:
+    build:
+      context: .               # Use the current directory as the build context
+      target: development      # Build up to the 'development' stage in the Dockerfile
+    environment:
+      - NODE_ENV=development   # Set the environment variable for development mode
+      - MONGODB_URI=${MONGODB_URI}  # Inject MongoDB URI from your .env file or shell
+    volumes:
+      - .:/usr/src/app         # Mount the current directory into the container for live code changes
+    ports:
+      - "8881:8881"            # Map container port 8881 to host port 8881
+    command: ["npm", "run", "dev"]  # Override the CMD in Dockerfile to start the dev server
+    networks:
+      - app-network            # Connect to the custom bridge network
+
+  # ------------------------
+  # Production Environment
+  # ------------------------
+  app-prod:
+    build:
+      context: .               # Use the current directory as the build context
+      target: production       # Build up to the 'production' stage in the Dockerfile
+    environment:
+      - NODE_ENV=production    # Set the environment variable for production mode
+      - MONGODB_URI=${MONGODB_URI}  # Inject MongoDB URI from your .env file or shell
+    ports:
+      - "8881:8881"            # Map container port 8881 to host port 8881
+    command: ["npm", "run", "start"]  # Override the CMD to start the production server
+    networks:
+      - app-network            # Connect to the custom bridge network
+
+# ------------------------
+# Define a custom network
+# ------------------------
+networks:
+  app-network:
+    driver: bridge             # Use Docker’s default bridge networking
