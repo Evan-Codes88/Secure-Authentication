@@ -1,0 +1,37 @@
+# ---------------------------------------
+# GitHub Actions Workflow for CI/CD
+# Builds and runs Docker Compose setup
+# ---------------------------------------
+
+name: Docker Compose CI/CD # Name of the workflow shown in the GitHub Actions UI
+
+on:
+  push:
+    branches:
+      - main # Trigger the workflow when code is pushed to the 'main' branch
+  pull_request: # Also trigger on pull requests targeting 'main'
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest # Use the latest Ubuntu environment for the job
+
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }} # Use the MongoDB URI stored securely in GitHub Secrets
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Step to clone your repository into the workflow runner
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3 # Enables advanced Docker build capabilities
+
+      - name: Set up Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
+        # Installs Docker Compose, which is not preinstalled on the runner
+
+      - name: Build and run Docker Compose
+        run: docker-compose -f docker-compose.yaml up --build -d app-prod
+        # Builds the Docker images and runs only the production service in detached mode
+
+      - name: Check running containers
+        run: docker ps # Optional: Lists all running containers to verify successful startup
