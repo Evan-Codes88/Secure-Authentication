@@ -5,6 +5,7 @@ services:
   # Development Environment
   # ------------------------
   app-dev:
+    image: evan/secure-authentication:dev-v1.0  # Define an image for the dev environment
     build:
       context: .               # Use the current directory as the build context
       target: development      # Build up to the 'development' stage in the Dockerfile
@@ -23,6 +24,7 @@ services:
   # Production Environment
   # ------------------------
   app-prod:
+    image: evan/secure-authentication:prod-v1.0  # Define an image for the production environment
     build:
       context: .               # Use the current directory as the build context
       target: production       # Build up to the 'production' stage in the Dockerfile
