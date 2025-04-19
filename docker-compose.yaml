@@ -37,6 +37,23 @@ services:
     networks:
       - app-network            # Connect to the custom bridge network
 
+  # ------------------------
+  # Testing Environment
+  # ------------------------
+  app-test:
+    image: evan/secure-authentication:test-v1.0  # Define an image for the test environment
+    build:
+      context: .               # Use the current directory as the build context
+      target: testing          # Build up to the 'testing' stage in the Dockerfile
+    environment:
+      - NODE_ENV=test          # Set the environment variable for test mode
+      - MONGODB_URI=${MONGODB_URI}  # Inject MongoDB URI from your .env file or shell
+    volumes:
+      - .:/usr/src/app         # Mount the current directory into the container for live code changes
+    command: ["npm", "run", "test"]  # Override the CMD to run the tests
+    networks:
+      - app-network            # Connect to the custom bridge network
+
 # ------------------------
 # Define a custom network
 # ------------------------

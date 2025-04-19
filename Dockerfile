@@ -49,3 +49,23 @@ EXPOSE 8881
 
 # Command to run the app in production mode
 CMD ["npm", "run", "start"]
+
+# Testing Stage
+FROM node:23.11.0-slim AS testing
+
+WORKDIR /usr/src/app
+
+# Copy only the necessary files from build stage
+COPY --from=build /usr/src/app /usr/src/app
+
+# Set environment variable for testing
+ENV NODE_ENV=test
+
+# Install testing dependencies
+RUN npm install --only=development
+
+# Expose port (optional, depending on test setup)
+EXPOSE 8881
+
+# Command to run the tests
+CMD ["npm", "run", "test"]

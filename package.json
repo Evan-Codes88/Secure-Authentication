@@ -4,6 +4,7 @@
   "description": "This is a backend API For secure Authentication including JWT &amp; 2FA",
   "main": "index.js",
   "scripts": {
+    "test": "node index.js",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
