@@ -35,3 +35,6 @@ jobs:
 
       - name: Check running containers
         run: docker ps # Optional: Lists all running containers to verify successful startup
+
+      - name: Shut down Docker Compose
+        run: docker-compose down # Stops and removes the containers after the build and check
