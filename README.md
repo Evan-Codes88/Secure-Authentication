@@ -12,9 +12,22 @@ This blog post walks through the _ethical and technical issues_ tackled in this 
 
 ## Table of Contents
 
-[Industry Trends and Opportunities](#industry-trends-and-opportunities) - [Passwordless Authentication Is Going Mainstream](#passwordless-authentication-is-going-mainstream) - [The Rise of Zero Trust Security Models](#the-rise-of-zero-trust-security-models)
-[Ethical and Technical Considerations](#ethical-and-technical-considerations) - [The Core Ethical Issue: Mishandling User Authentication](#the-core-ethical-issue-mishandling-user-authentication) - [Trust and Responsibility in the Developer Role](#trust-and-responsibility-in-the-developer-role) - [Consequences of Ethical Negligence](#consequences-of-ethical-negligence) - [How This Project Addresses These Ethical Concerns](#how-this-project-addresses-these-ethical-concerns)
-[The Problem: Insecure User Authentication and Its Solution](#the-problem-insecure-user-authentication-and-its-solution) - [Why Is This A Problem](#why-is-this-a-problem) - [The Solution: Multi-layered Authentication and Secure Session Design](#the-solution-multi-layered-authentication-and-secure-session-design) - [JWT Authentication](#jwt-authentication) - [Two Factor Authentication (2FA) with TOTP](#two-factor-authentication-2fa-with-totp) - [Email Verification](#email-verification) - [Secure Cookie Handling](#secure-cookie-handling) - [Logout and Token Revocation](#logout-and-token-revocation) - [Compliance With Industry Recommendations](#compliance-with-industry-recommendations) - [Practical Outcomes and Risk Mitigation](#practical-outcomes-and-risk-mitigation)
+- [Industry Trends and Opportunities](#industry-trends-and-opportunities) - [Passwordless Authentication Is Going Mainstream](#passwordless-authentication-is-going-mainstream)
+- [The Rise of Zero Trust Security Models](#the-rise-of-zero-trust-security-models)
+- [Ethical and Technical Considerations](#ethical-and-technical-considerations)
+- [The Core Ethical Issue: Mishandling User Authentication](#the-core-ethical-issue-mishandling-user-authentication)
+- [Trust and Responsibility in the Developer Role](#trust-and-responsibility-in-the-developer-role) - [Consequences of Ethical Negligence](#consequences-of-ethical-negligence)
+- [How This Project Addresses These Ethical Concerns](#how-this-project-addresses-these-ethical-concerns)
+- [The Problem: Insecure User Authentication and Its Solution](#the-problem-insecure-user-authentication-and-its-solution)
+- [Why Is This A Problem](#why-is-this-a-problem)
+- [The Solution: Multi-layered Authentication and Secure Session Design](#the-solution-multi-layered-authentication-and-secure-session-design)
+- [JWT Authentication](#jwt-authentication)
+- [Two Factor Authentication (2FA) with TOTP](#two-factor-authentication-2fa-with-totp)
+- [Email Verification](#email-verification)
+- [Secure Cookie Handling](#secure-cookie-handling)
+- [Logout and Token Revocation](#logout-and-token-revocation)
+- [Compliance With Industry Recommendations](#compliance-with-industry-recommendations)
+- [Practical Outcomes and Risk Mitigation](#practical-outcomes-and-risk-mitigation)
 
 - [Objective](#objective)
 - [Step By Step Plan](#step-by-step-plan)
