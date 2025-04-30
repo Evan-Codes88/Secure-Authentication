@@ -12,11 +12,13 @@ This blog post walks through the _ethical and technical issues_ tackled in this 
 
 ## Table of Contents
 
-- [Industry Trends and Opportunities](#industry-trends-and-opportunities) - [Passwordless Authentication Is Going Mainstream](#passwordless-authentication-is-going-mainstream)
+- [Industry Trends and Opportunities](#industry-trends-and-opportunities)
+- [Passwordless Authentication Is Going Mainstream](#passwordless-authentication-is-going-mainstream)
 - [The Rise of Zero Trust Security Models](#the-rise-of-zero-trust-security-models)
 - [Ethical and Technical Considerations](#ethical-and-technical-considerations)
 - [The Core Ethical Issue: Mishandling User Authentication](#the-core-ethical-issue-mishandling-user-authentication)
-- [Trust and Responsibility in the Developer Role](#trust-and-responsibility-in-the-developer-role) - [Consequences of Ethical Negligence](#consequences-of-ethical-negligence)
+- [Trust and Responsibility in the Developer Role](#trust-and-responsibility-in-the-developer-role)
+- [Consequences of Ethical Negligence](#consequences-of-ethical-negligence)
 - [How This Project Addresses These Ethical Concerns](#how-this-project-addresses-these-ethical-concerns)
 - [The Problem: Insecure User Authentication and Its Solution](#the-problem-insecure-user-authentication-and-its-solution)
 - [Why Is This A Problem](#why-is-this-a-problem)
