@@ -1,62 +1,52 @@
-version: '3.8'  # Docker Compose file format version
-
+version: '3.8'
 services:
-  # ------------------------
-  # Development Environment
-  # ------------------------
   app-dev:
-    image: evan/secure-authentication:dev-v1.0  # Define an image for the dev environment
+    image: evan/secure-authentication:dev-v1.0
     build:
-      context: .               # Use the current directory as the build context
-      target: development      # Build up to the 'development' stage in the Dockerfile
+      context: .
+      target: development
     environment:
-      - NODE_ENV=development   # Set the environment variable for development mode
-      - MONGODB_URI=${MONGODB_URI}  # Inject MongoDB URI from your .env file or shell
+      - NODE_ENV=development
+      - MONGODB_URI=${MONGODB_URI}
     volumes:
-      - .:/usr/src/app         # Mount the current directory into the container for live code changes
+      - .:/usr/src/app
     ports:
-      - "8881:8881"            # Map container port 8881 to host port 8881
-    command: ["npm", "run", "dev"]  # Override the CMD in Dockerfile to start the dev server
+      - "8881:8881"
+    command: ["npm", "run", "dev"]
     networks:
-      - app-network            # Connect to the custom bridge network
-
-  # ------------------------
-  # Production Environment
-  # ------------------------
+      - app-network
+    env_file:
+      - .env
   app-prod:
-    image: evan/secure-authentication:prod-v1.0  # Define an image for the production environment
+    image: evan/secure-authentication:prod-v1.0
     build:
-      context: .               # Use the current directory as the build context
-      target: production       # Build up to the 'production' stage in the Dockerfile
+      context: .
+      target: production
     environment:
-      - NODE_ENV=production    # Set the environment variable for production mode
-      - MONGODB_URI=${MONGODB_URI}  # Inject MongoDB URI from your .env file or shell
+      - NODE_ENV=production
+      - MONGODB_URI=${MONGODB_URI}
     ports:
-      - "8881:8881"            # Map container port 8881 to host port 8881
-    command: ["npm", "run", "start"]  # Override the CMD to start the production server
+      - "80:8881"
+    command: ["npm", "run", "start"]
     networks:
-      - app-network            # Connect to the custom bridge network
-
-  # ------------------------
-  # Testing Environment
-  # ------------------------
+      - app-network
+    env_file:
+      - .env
   app-test:
-    image: evan/secure-authentication:test-v1.0  # Define an image for the test environment
+    image: evan/secure-authentication:test-v1.0
     build:
-      context: .               # Use the current directory as the build context
-      target: testing          # Build up to the 'testing' stage in the Dockerfile
+      context: .
+      target: testing
     environment:
-      - NODE_ENV=test          # Set the environment variable for test mode
-      - MONGODB_URI=${MONGODB_URI}  # Inject MongoDB URI from your .env file or shell
+      - NODE_ENV=test
+      - MONGODB_URI=${MONGODB_URI}
     volumes:
-      - .:/usr/src/app         # Mount the current directory into the container for live code changes
-    command: ["npm", "run", "test"]  # Override the CMD to run the tests
+      - .:/usr/src/app
+    command: ["npm", "run", "test"]
     networks:
-      - app-network            # Connect to the custom bridge network
-
-# ------------------------
-# Define a custom network
-# ------------------------
+      - app-network
+    env_file:
+      - .env
 networks:
   app-network:
-    driver: bridge             # Use Docker’s default bridge networking
+    driver: bridge
