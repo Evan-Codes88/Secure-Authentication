@@ -37,8 +37,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Push Docker images
         run: |
-          docker push evan/secure-authentication:dev-v1.0
-          docker push evan/secure-authentication:prod-v1.0
-          docker push evan/secure-authentication:test-v1.0
+          docker push evanmclean/secure-authentication:dev-v1.0
+          docker push evanmclean/secure-authentication:prod-v1.0
+          docker push evanmclean/secure-authentication:test-v1.0
       - name: Shut down Docker Compose
         run: docker-compose -f docker-compose.yaml down
