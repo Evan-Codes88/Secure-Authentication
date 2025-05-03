@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   app-dev:
-    image: evan/secure-authentication:dev-v1.0
+    image: evanmclean/secure-authentication:dev-v1.0
     build:
       context: .
       target: development
@@ -18,7 +18,7 @@ services:
     env_file:
       - .env
   app-prod:
-    image: evan/secure-authentication:prod-v1.0
+    image: evanmclean/secure-authentication:prod-v1.0
     build:
       context: .
       target: production
@@ -33,7 +33,7 @@ services:
     env_file:
       - .env
   app-test:
-    image: evan/secure-authentication:test-v1.0
+    image: evanmclean/secure-authentication:test-v1.0
     build:
       context: .
       target: testing
