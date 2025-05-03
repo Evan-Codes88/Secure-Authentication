@@ -8,7 +8,7 @@ According to IBM's _Cost of a Data Breach Report 2023_, the average cost of a da
 
 In response to this growing concern, I created a safe authentication system that is modular and simple to incorporate into other web application projects, allowing developers to use email verification, JWT, and TOTP-based 2FA to achieve robust authentication.
 
-This blog post walks through the _ethical and technical issues_ tackled in this project, provides _implementation details and justifications_, and _reflects on lessons learned during development_. It also explores _current and emerging industry trends in web security_, such as the rising adoption of multi-factor authentication (MFA) and the shift toward zero-trust architecture. Additionally, it includes _full setup instructions_ and _real-world case studies_, offering developers an opportunity to implement a scalable, modern, and secure authentication system in their own projects.
+This blog post walks through the _ethical and technical issues_ tackled in this project, provides _implementation details and justifications_, and _reflects on lessons learned during development_. It also explores _current and emerging industry trends in web security_, such as the rising adoption of multi-factor authentication (MFA) and the shift toward zero-trust architecture. Additionally, it includes _full setup instructions_ and _real-world case studies_, offering developers an opportunity to implement a scalable, modern, and secure authentication system in their own projects..
 
 ## Table of Contents
 
